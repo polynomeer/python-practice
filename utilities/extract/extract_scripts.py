@@ -1,51 +1,55 @@
 import os
 import whisper
 
-# Get the directory where the script is located
-script_dir = os.path.dirname(os.path.abspath(__file__))
+# Load the Whisper model (you can change to "small", "medium", etc.)
+model = whisper.load_model("base")
 
-# Input folder and output path setup
-segment_folder = os.path.join(script_dir, "split_segments")
-output_folder = os.path.join(script_dir, "transcripts")
-output_file = os.path.join(output_folder, "full_transcription.txt")
+# Input and output paths
+segment_folder = "split_segments"
+output_folder = "transcripts"
+output_text = os.path.join(output_folder, "full_transcription.txt")
+progress_log = os.path.join(output_folder, "processed.log")
 
-# Load Whisper model (small models are faster)
-model = whisper.load_model("base")  # Can also use "small" or "medium"
-
-# Ensure the output directory exists
+# Create output folder if it doesn't exist
 os.makedirs(output_folder, exist_ok=True)
 
-# Check if the input folder exists
-if not os.path.exists(segment_folder):
-    print(f"❌ Input directory '{segment_folder}' does not exist.")
-    print(f"🔧 Please make sure the required folder and files are available.")
-    exit(1)
+# Load previously processed segment filenames
+processed_segments = set()
+if os.path.exists(progress_log):
+    with open(progress_log, "r", encoding="utf-8") as f:
+        processed_segments = set(line.strip() for line in f if line.strip())
 
-# List and sort segment files
+# Get and sort all segment files
 segment_files = sorted([
     f for f in os.listdir(segment_folder)
     if f.endswith(".m4a")
 ])
 
-# Accumulate all text
-all_text = []
+# Open the output and progress log files
+with open(output_text, "a", encoding="utf-8") as out_file, \
+        open(progress_log, "a", encoding="utf-8") as log_file:
+    print(f"🔍 Found {len(segment_files)} files. {len(processed_segments)} already processed.\n")
 
-print(f"🔍 Processing {len(segment_files)} segment files...")
+    for idx, filename in enumerate(segment_files, start=1):
+        if filename in processed_segments:
+            print(f"⏩ Skipping (already processed): {filename}")
+            continue
 
-# Process each segment audio file
-for idx, filename in enumerate(segment_files, start=1):
-    segment_path = os.path.join(segment_folder, filename)
-    print(f"🎙️ ({idx}/{len(segment_files)}) Processing: {filename}")
+        segment_path = os.path.join(segment_folder, filename)
+        print(f"🎙️ ({idx}) Processing: {filename}")
 
-    try:
-        result = model.transcribe(segment_path, language="ko")
-        all_text.append(f"\n--- [Segment {idx:02}] {filename} ---\n")
-        all_text.append(result["text"])
-    except Exception as e:
-        print(f"⚠️ Error while processing {filename}: {e}")
+        try:
+            # Transcribe the audio file
+            result = model.transcribe(segment_path, language="ko")
 
-# Save the text results to a file
-with open(output_file, "w", encoding="utf-8") as f:
-    f.write("\n".join(all_text))
+            # Write the transcription to the output file
+            out_file.write(f"\n[Segment: {filename}]\n")
+            out_file.write(result["text"] + "\n")
+            out_file.flush()  # Ensure progress is saved
 
-print(f"\n✅ Transcription saved to '{output_file}'.")
+            # Log the processed file
+            log_file.write(filename + "\n")
+            log_file.flush()
+
+        except Exception as e:
+            print(f"⚠️ Error processing {filename}: {e}")
