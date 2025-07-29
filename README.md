@@ -1,7 +1,7 @@
 # Python Practice Repository
 
-This repository is a structured Python playground for learning, experimentation, and deeper understanding of Python.  
-It's organized by purpose: from basic feature exploration to internal behavior analysis and production-grade patterns.
+This repository is a structured Python playground for learning, experimentation, and deep exploration of Python language features, patterns, and tools.  
+It supports personal learning, automation, technical blogging, and tool-based development, organized by topic and purpose.
 
 ---
 
@@ -9,43 +9,46 @@ It's organized by purpose: from basic feature exploration to internal behavior a
 
 | Directory | Description |
 |-----------|-------------|
-| `playground/` | A free space for trying out code without constraints. Great for drafts, quick tests, and debugging. |
-| `core-concepts/` | Fundamental Python topics such as variables, functions, control flow, classes, exceptions, and basic OOP. |
+| `playground/` | A freeform space for quick tests and spontaneous code. No structure or polish required. |
+| `core-concepts/` | Fundamental Python topics like control flow, data types, functions, classes, exceptions, and basic OOP. |
 | `api-snippets/` | Examples using Python standard libraries and modules like `collections`, `itertools`, `datetime`, and `pathlib`. |
-| `features/` | Practical usage of Python language features and syntax: list comprehensions, dataclasses, decorators, f-strings, type hints, etc. Focused on "how it works." |
-| `coding-recipes/` | Reusable solutions for real-world problems and interviews (e.g., file watchers, in-memory caches, CLI apps, JSON serializers). |
-| `patterns/` | Design pattern implementations in Python: Singleton, Strategy, Factory, Observer, etc., with real-world adaptations. |
-| `architecture/` | Application-level design examples like layered architecture, service modules, DDD-like structuring, CLI/MVC modularization, etc. |
-| `features/` | Hands-on usage-focused experiments. Think Baeldung-style learning of Python syntax and APIs. |
-| `labs/` | Experimental space for verifying language behavior, side effects, and performance trade-offs. Useful for “What if?” or stress testing. |
-| `internals/` | Deep-dive code for understanding Python internals: GIL, memory model, `sys.getsizeof`, garbage collection, import system, AST and bytecode. |
-| `benchmarks/` | Microbenchmarks comparing performance between different approaches, data structures, or algorithms. Often uses `timeit`, `perf`, or `memory_profiler`. |
-| `study-sources/` | Code written while following books or courses (e.g., Fluent Python, Real Python, CS50, or Udemy). Organized by source material. |
-| `blog-samples/` | Clean and minimal examples intended for blog posts, talks, or external educational content. Polished and documented. |
-| `drafts/` | Work-in-progress code, notes, and ideas that aren't yet ready to be placed elsewhere. |
+| `features/` | Learning how specific Python features and language syntax work. Great for usage-focused learning (e.g., `match-case`, `f-strings`, `dataclass`, `asyncio`). |
+| `coding-recipes/` | Reusable, real-world code patterns for solving common problems (e.g., file processing, in-memory cache, CLI tools). Useful for interviews and production inspiration. |
+| `patterns/` | Implementations of design patterns like Singleton, Factory, Strategy, Observer, etc., adapted to Python idioms. |
+| `architecture/` | Examples of application structure such as layered architecture, modularization, MVC, and DDD-like designs. |
+| `testing/` | Testing-related topics including unit tests (`unittest`, `pytest`), mocking, test discovery, and parametric testing. |
+| `tooling/` | Developer tools for formatting, linting, type checking, automation, packaging, and coverage (`black`, `mypy`, `tox`, `pre-commit`, etc.). |
+| `utilities/` | Task-oriented helper scripts for automation or real-world workflows. Examples include subtitle extraction, DB-to-Excel exports, and batch file renaming. |
+| `labs/` | Experimental code to test hypotheses, language behaviors, performance edge cases, or language quirks. |
+| `internals/` | Deep dive into Python internals: memory model, garbage collection, GIL behavior, AST/bytecode, and module loading. |
+| `benchmarks/` | Micro-benchmarks for comparing performance of different implementations, algorithms, or APIs using `timeit`, `memory_profiler`, etc. |
+| `blog-samples/` | Clean and well-documented code snippets intended for blog posts, presentations, or tutorials. |
+| `study-sources/` | Code written by following books, courses, or tutorials (e.g., Fluent Python, Real Python, CS50, or Udemy). Organized per source. |
+| `drafts/` | Unpolished code, scratch work, and exploratory drafts not yet sorted into other categories. |
 
 ---
 
 ## 🧪 How to Use
 
-- Each directory serves a specific learning purpose.
-- You can run any script directly with `python script.py`, or use Jupyter notebooks if desired.
-- Some directories may include virtual environments, `requirements.txt`, or test suites.
+- Each directory is self-contained and purpose-driven.
+- Run scripts directly with `python script.py`, or use `poetry`, `venv`, or `pip install -r requirements.txt` as needed.
+- Use the `playground/` or `drafts/` directory to experiment before structuring code into a proper category.
 
 ---
 
 ## 🧰 Development Tips
 
-- Use `black`, `flake8`, `mypy`, and `pytest` to keep things clean and testable.
-- Include inline comments or mini `README.md` files to explain experiments or key learnings.
-- Use `drafts/` or `playground/` for scratch work, and organize once it matures.
+- Keep code clean and readable.
+- Use `black`, `flake8`, `mypy`, `pytest`, etc. for quality and testing.
+- Prefer small, self-contained scripts in `utilities/`.
+- Use `README.md` files in subfolders to document what you're testing or learning.
 
 ---
 
 ## 📜 License
 
 This repository is licensed under the MIT License.  
-Use, share, and modify freely for personal or educational purposes.
+You are free to use, adapt, and share it for personal or educational purposes.
 
 ---
 
