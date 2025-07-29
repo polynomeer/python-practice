@@ -1,23 +1,51 @@
+import os
 import whisper
 
-# pip install openai-whisper
-# pip install ffmpeg-python
-# 1. Whisper 모델 불러오기 (base/medium 추천, tiny는 정확도 낮음)
-model = whisper.load_model("medium")  # 또는 "base", "small"
+# Get the directory where the script is located
+script_dir = os.path.dirname(os.path.abspath(__file__))
 
-# 2. 변환할 m4a 오디오 파일 경로
-audio_path = "src.m4a"  # 현재 폴더에 위치할 것
+# Input folder and output path setup
+segment_folder = os.path.join(script_dir, "split_segments")
+output_folder = os.path.join(script_dir, "transcripts")
+output_file = os.path.join(output_folder, "full_transcription.txt")
 
-# 3. 음성 인식 실행 (language="ko"로 명시)
-result = model.transcribe(audio_path, language="ko")
+# Load Whisper model (small models are faster)
+model = whisper.load_model("base")  # Can also use "small" or "medium"
 
-# 4. 결과 출력
-print("🔊 extracted scripts:")
-print(result["text"])
+# Ensure the output directory exists
+os.makedirs(output_folder, exist_ok=True)
 
-# 5. 결과를 txt 파일로 저장
-output_path = "transcription.txt"
-with open(output_path, "w", encoding="utf-8") as f:
-    f.write(result["text"])
+# Check if the input folder exists
+if not os.path.exists(segment_folder):
+    print(f"❌ Input directory '{segment_folder}' does not exist.")
+    print(f"🔧 Please make sure the required folder and files are available.")
+    exit(1)
 
-print(f"\n✅ Extracted scripts save to '{output_path}'")
+# List and sort segment files
+segment_files = sorted([
+    f for f in os.listdir(segment_folder)
+    if f.endswith(".m4a")
+])
+
+# Accumulate all text
+all_text = []
+
+print(f"🔍 Processing {len(segment_files)} segment files...")
+
+# Process each segment audio file
+for idx, filename in enumerate(segment_files, start=1):
+    segment_path = os.path.join(segment_folder, filename)
+    print(f"🎙️ ({idx}/{len(segment_files)}) Processing: {filename}")
+
+    try:
+        result = model.transcribe(segment_path, language="ko")
+        all_text.append(f"\n--- [Segment {idx:02}] {filename} ---\n")
+        all_text.append(result["text"])
+    except Exception as e:
+        print(f"⚠️ Error while processing {filename}: {e}")
+
+# Save the text results to a file
+with open(output_file, "w", encoding="utf-8") as f:
+    f.write("\n".join(all_text))
+
+print(f"\n✅ Transcription saved to '{output_file}'.")
